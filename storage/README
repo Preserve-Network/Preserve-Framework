@@ -1,0 +1,7 @@
+Each storage provider must follow the following interface
+
+....
+
+And return
+
+....
