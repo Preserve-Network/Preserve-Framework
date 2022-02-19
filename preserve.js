@@ -1,11 +1,9 @@
-import "dotenv/config";
-import web3 from "web3";
+require("dotenv").config();
 
-import { v4 as uuidv4 } from "uuid";
+const web3 = require("web3");
+const Web3StorageHelper = require("./storage/web3/index");
 
-import { Web3StorageHelper } from "./storage/web3/index.js";
-
-export class Preserve {
+class Preserve {
   constructor() {
     this.storage = new Web3StorageHelper();
 
@@ -26,8 +24,6 @@ export class Preserve {
   }
 
   async preserve(name, description, filename) {
-    const uuid = uuidv4();
-
     // First we upload the actual files
     const fileCID = await this.storage.storeFiles(filename);
 
@@ -40,7 +36,7 @@ export class Preserve {
 
     // Upload the metadata
     const metaCID = await this.storage.storeContent(
-      `${uuid}.json`,
+      `metadata.json`,
       metadataString
     );
 
@@ -85,3 +81,5 @@ export class Preserve {
     return receipt.transactionHash;
   }
 }
+
+module.exports = Preserve;

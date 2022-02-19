@@ -1,5 +1,5 @@
 // Store File
-import { Preserve } from "./preserve.js";
+const Preserve = require("./preserve.js");
 
 (async () => {
   const preserve = new Preserve();

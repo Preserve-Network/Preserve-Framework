@@ -1,10 +1,11 @@
-import "dotenv/config";
-import { Web3Storage, File, getFilesFromPath } from "web3.storage";
+require("dotenv").config();
+
+const { Web3Storage, File, getFilesFromPath } = require("web3.storage");
 
 const WEB3_STORAGE_KEY = process.env.WEB3_STORAGE_KEY;
 const client = new Web3Storage({ token: WEB3_STORAGE_KEY });
 
-export class Web3StorageHelper {
+class Web3StorageHelper {
   constructor() {}
 
   async storeFiles(filePath) {
@@ -20,3 +21,5 @@ export class Web3StorageHelper {
     return cid;
   }
 }
+
+module.exports = Web3StorageHelper;
