@@ -14,7 +14,6 @@ export class Web3StorageHelper {
   }
 
   async storeContent(name, content) {
-    console.log("content", content);
     const buffer = Buffer.from(content);
     const file = [new File([buffer], name)];
     const cid = await client.put(file);
