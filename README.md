@@ -15,3 +15,9 @@ POLYGON_TEST_CONTRACT=
 ## Compile Code
 
 npx hardhat compile
+
+
+## Possible use-cases
+* Take screenshots to record history
+* Preserve all tweets or posts from users
+* Preserve government documents, rollcalls, voter records, etc
