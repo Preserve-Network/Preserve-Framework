@@ -2,6 +2,7 @@ require("dotenv").config();
 
 const Web3 = require("web3");
 const Web3StorageHelper = require("./storage/web3/index");
+const generatePreserveMetadata = require("./storage/utils");
 
 class Preserve {
   constructor() {
@@ -19,35 +20,18 @@ class Preserve {
     this.web3js.eth.defaultAccount = this.account.address;
   }
 
-  generatePreserveMetadata(name, description, cid) {
-    return JSON.stringify({
+  /***
+   * Preserves a single file
+   */
+  async preserveFile(name, description, filepath) {
+    const metadataString = generatePreserveMetadata(
       name,
       description,
-      cid,
-    });
-  }
-
-  async preserve(name, description, filename) {
-    // First we upload the actual files
-    const fileCID = await this.storage.storeFiles(filename);
-
-    // TODO can we upload both of these files at the same time?
-    // We use the CID of the uploaded files to upload the metadata file
-    const metadataString = this.generatePreserveMetadata(
-      name,
-      description,
-      fileCID
+      filepath
     );
 
-    // Upload the metadata
-    const metaCID = await this.storage.storeContent(
-      `metadata.json`,
-      metadataString
-    );
-
-    // Index the metadata file in the blockchain
-    const hash = this.addValueToIndex(metaCID);
-    return hash;
+    const fileCID = await this.storage.storeFiles([filepath], metadataString);
+    return await this.addValueToIndex(fileCID);
   }
 
   async getTransactionCount() {

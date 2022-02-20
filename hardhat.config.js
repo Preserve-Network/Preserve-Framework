@@ -9,7 +9,15 @@ const POLYGON_API_KEY = process.env.POLYGON_API_KEY;
  * @type import('hardhat/config').HardhatUserConfig
  */
 module.exports = {
-  solidity: "0.8.4",
+  solidity: {
+    version: "0.8.4",
+    settings: {
+      optimizer: {
+        enabled: true,
+        runs: 200,
+      },
+    },
+  },
   defaultNetwork: "mumbai",
   networks: {
     hardhat: {},
@@ -23,5 +31,8 @@ module.exports = {
     tests: "./test",
     cache: "./cache",
     artifacts: "./artifacts",
+  },
+  mocha: {
+    timeout: 20000,
   },
 };

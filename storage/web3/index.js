@@ -8,16 +8,11 @@ const client = new Web3Storage({ token: WEB3_STORAGE_KEY });
 class Web3StorageHelper {
   constructor() {}
 
-  async storeFiles(filePath) {
-    const files = await getFilesFromPath(filePath);
-    const cid = await client.put(files);
-    return cid;
-  }
-
-  async storeContent(name, content) {
-    const buffer = Buffer.from(content);
-    const file = [new File([buffer], name)];
-    const cid = await client.put(file);
+  async storeFiles(fileList, metadataString) {
+    const buffer = Buffer.from(metadataString);
+    const metadataFile = [new File([buffer], "metadata.json")];
+    const files = await getFilesFromPath(fileList);
+    const cid = await client.put(files.concat(metadataFile));
     return cid;
   }
 }
