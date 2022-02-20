@@ -21,16 +21,12 @@ class Preserve {
   }
 
   /***
-   * Preserves a single file
+   * Preserves a list of files
    */
-  async preserveFile(name, description, filepath) {
-    const metadataString = generatePreserveMetadata(
-      name,
-      description,
-      filepath
-    );
+  async preserveFiles({ name, description, files }) {
+    const metadataString = generatePreserveMetadata(name, description, files);
 
-    const fileCID = await this.storage.storeFiles([filepath], metadataString);
+    const fileCID = await this.storage.storeFiles(files, metadataString);
     return await this.addValueToIndex(fileCID);
   }
 
@@ -45,7 +41,6 @@ class Preserve {
     const receipt = await this.web3js.eth.sendSignedTransaction(
       signedTx.rawTransaction
     );
-    console.log(`Transaction hash: ${receipt.transactionHash}`);
     return receipt.transactionHash;
   }
 
