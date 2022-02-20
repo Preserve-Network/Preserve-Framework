@@ -1,5 +1,5 @@
 // Store File
-const Preserve = require("./preserve.js");
+const Preserve = require("./index.js");
 
 (async () => {
   const preserve = new Preserve();
@@ -8,6 +8,9 @@ const Preserve = require("./preserve.js");
     name: "single file test",
     description: "desc",
     files: ["testdata/test1.txt", "testdata/test2.txt"],
+    attributes: {
+      hello: "world",
+    },
   });
 
   console.log(hash);

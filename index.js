@@ -23,8 +23,13 @@ class Preserve {
   /***
    * Preserves a list of files
    */
-  async preserveFiles({ name, description, files }) {
-    const metadataString = generatePreserveMetadata(name, description, files);
+  async preserveFiles({ name, description, files, attributes }) {
+    const metadataString = generatePreserveMetadata(
+      name,
+      description,
+      files,
+      attributes
+    );
 
     const fileCID = await this.storage.storeFiles(files, metadataString);
     return await this.addValueToIndex(fileCID);
