@@ -2,7 +2,6 @@ const API_KEY = process.env.POLYGON_API_KEY;
 const PRIVATE_KEY = process.env.POLYGON_TEST_KEY;
 const CONTRACT_ADDRESS = process.env.POLYGON_TEST_CONTRACT;
 
-const { id } = require("ethers/lib/utils");
 const contract = require("../artifacts/contracts/preserve.sol/Preserve.json");
 
 // provider - Alchemy
