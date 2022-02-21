@@ -5,13 +5,20 @@ const Web3StorageHelper = require("./storage/web3/index");
 const generatePreserveMetadata = require("./storage/utils");
 
 class Preserve {
-  constructor() {
+  constructor(network = "mumbai") {
     this.storage = new Web3StorageHelper();
 
-    // Hardcoded for polygon test network for now
-    this.from_address = process.env.POLYGON_TEST_ADDRESS;
-    this.key = process.env.POLYGON_TEST_KEY;
-    this.url = `https://polygon-mumbai.g.alchemy.com/v2/${process.env.POLYGON_API_KEY}`;
+    if (network === "mainnet") {
+      this.from_address = process.env.POLYGON_ADDRESS;
+      this.key = process.env.POLYGON_KEY;
+      this.url = `https://polygon-mainnet.g.alchemy.com/v2/${process.env.POLYGON_TEST_ALCHEMY_API_KEY}`;
+      this.contractAddress = process.env.POLYGON_CONTRACT;
+    } else {
+      this.from_address = process.env.POLYGON_TEST_ADDRESS;
+      this.key = process.env.POLYGON_TEST_KEY;
+      this.url = `https://polygon-mumbai.g.alchemy.com/v2/${process.env.POLYGON_TEST_ALCHEMY_API_KEY}`;
+      this.contractAddress = process.env.POLYGON_TEST_CONTRACT;
+    }
 
     this.web3js = new Web3(new Web3.providers.HttpProvider(this.url));
     this.account = this.web3js.eth.accounts.privateKeyToAccount(this.key);
@@ -51,19 +58,18 @@ class Preserve {
 
   async addValueToIndex(value) {
     const nonce = await this.getTransactionCount();
-    const contractAddress = process.env.POLYGON_TEST_CONTRACT;
     const jsonInterface =
       require("./artifacts/contracts/preserve.sol/Preserve.json").abi;
     const contract = new this.web3js.eth.Contract(
       jsonInterface,
-      contractAddress
+      this.contractAddress
     );
 
     // TODO Figure out failures
     // TODO Figure out gas prices
     const txData = {
       from: this.web3js.eth.defaultAccount,
-      to: contractAddress,
+      to: this.contractAddress,
       nonce: nonce,
       gasPrice: 2000000000,
       gasLimit: 500000,
@@ -79,12 +85,11 @@ class Preserve {
   }
 
   async getIndexLength() {
-    const contractAddress = process.env.POLYGON_TEST_CONTRACT;
     const jsonInterface =
       require("./artifacts/contracts/preserve.sol/Preserve.json").abi;
     const contract = new this.web3js.eth.Contract(
       jsonInterface,
-      contractAddress
+      this.contractAddress
     );
     const res = await contract.methods.returnIndexLen().call({
       from: this.web3js.eth.defaultAccount,
@@ -96,12 +101,11 @@ class Preserve {
 
   async getLastValue() {
     const lastIndex = (await this.getIndexLength()) - 1;
-    const contractAddress = process.env.POLYGON_TEST_CONTRACT;
     const jsonInterface =
       require("./artifacts/contracts/preserve.sol/Preserve.json").abi;
     const contract = new this.web3js.eth.Contract(
       jsonInterface,
-      contractAddress
+      this.contractAddress
     );
     //TODO fix gas prices, are they needed for calls
     const res = await contract.methods.returnValueAtIndex(lastIndex).call({
