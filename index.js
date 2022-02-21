@@ -102,11 +102,11 @@ class Preserve {
       gas: 200000,
       gasPrice: 200000,
     });
+
     return res;
   }
 
-  async getLastValue() {
-    const lastIndex = (await this.getIndexLength()) - 1;
+  async getValueAtIndex(index) {
     const jsonInterface =
       require("./artifacts/contracts/preserve.sol/Preserve.json").abi;
     const contract = new this.web3js.eth.Contract(
@@ -114,12 +114,17 @@ class Preserve {
       this.contractAddress
     );
     //TODO fix gas prices, are they needed for calls
-    const res = await contract.methods.returnValueAtIndex(lastIndex).call({
+    const res = await contract.methods.returnValueAtIndex(index).call({
       from: this.web3js.eth.defaultAccount,
       gas: 200000,
       gasPrice: 200000,
     });
     return res;
+  }
+
+  async getLastValue() {
+    const lastIndex = (await this.getIndexLength()) - 1;
+    return this.getValueAtIndex(lastIndex);
   }
 }
 
