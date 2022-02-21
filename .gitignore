@@ -105,7 +105,6 @@ dist
 .tern-port
 
 # Contracts
-artifacts
 cache
 
 testdata
