@@ -8,10 +8,11 @@ class Preserve {
   constructor(network = "mumbai") {
     this.storage = new Web3StorageHelper();
 
+    console.log(`Using ${network} network`);
     if (network === "mainnet") {
       this.from_address = process.env.POLYGON_ADDRESS;
       this.key = process.env.POLYGON_KEY;
-      this.url = `https://polygon-mainnet.g.alchemy.com/v2/${process.env.POLYGON_TEST_ALCHEMY_API_KEY}`;
+      this.url = `https://polygon-mainnet.g.alchemy.com/v2/${process.env.POLYGON_ALCHEMY_API_KEY}`;
       this.contractAddress = process.env.POLYGON_CONTRACT;
     } else {
       this.from_address = process.env.POLYGON_TEST_ADDRESS;
@@ -38,14 +39,17 @@ class Preserve {
       attributes
     );
 
+    console.log("Uploading files");
     const fileCID = await this.storage.storeFiles(files, metadataString);
+    console.log(`Files uploaded, cid: ${fileCID}`);
+
     return await this.addValueToIndex(fileCID);
   }
 
-  async getTransactionCount() {
+  async getTransactionCount(pending = false) {
     return await this.web3js.eth.getTransactionCount(
       this.from_address,
-      "pending"
+      pending ? "pending" : "latest"
     );
   }
 
@@ -58,6 +62,8 @@ class Preserve {
 
   async addValueToIndex(value) {
     const nonce = await this.getTransactionCount();
+    console.log(`Nonce ${nonce}`);
+
     const jsonInterface =
       require("./artifacts/contracts/preserve.sol/Preserve.json").abi;
     const contract = new this.web3js.eth.Contract(
@@ -71,7 +77,7 @@ class Preserve {
       from: this.web3js.eth.defaultAccount,
       to: this.contractAddress,
       nonce: nonce,
-      gasPrice: 2000000000,
+      gasPrice: 35000000000,
       gasLimit: 500000,
       data: contract.methods.addValueToIndex(value).encodeABI(),
     };

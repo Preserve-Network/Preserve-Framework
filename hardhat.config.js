@@ -3,7 +3,10 @@ require("dotenv").config();
 require("@nomiclabs/hardhat-waffle");
 
 const POLYGON_TEST_KEY = process.env.POLYGON_TEST_KEY;
-const POLYGON_API_KEY = process.env.POLYGON_API_KEY;
+const POLYGON_TEST_ALCHEMY_API_KEY = process.env.POLYGON_TEST_ALCHEMY_API_KEY;
+
+const POLYGON_KEY = process.env.POLYGON_KEY;
+const POLYGON_ALCHEMY_API_KEY = process.env.POLYGON_ALCHEMY_API_KEY;
 
 /**
  * @type import('hardhat/config').HardhatUserConfig
@@ -22,8 +25,12 @@ module.exports = {
   networks: {
     hardhat: {},
     mumbai: {
-      url: `https://polygon-mumbai.g.alchemy.com/v2/${POLYGON_API_KEY}`,
+      url: `https://polygon-mumbai.g.alchemy.com/v2/${POLYGON_TEST_ALCHEMY_API_KEY}`,
       accounts: [POLYGON_TEST_KEY],
+    },
+    mainnet: {
+      url: `https://polygon-mainnet.g.alchemy.com/v2/${POLYGON_ALCHEMY_API_KEY}`,
+      accounts: [POLYGON_KEY],
     },
   },
   paths: {
