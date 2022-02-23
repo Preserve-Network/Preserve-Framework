@@ -30,7 +30,7 @@ Run to make sure we pick up any changes in the contract
 
 Next, deploy the contract making sure you choose the correct network
 
-> npx hardhat run --network mumbai scripts/deploy.js
+> npx hardhat run scripts/deploy.js --network mumbai 
 
 Copy the contract address the deploy script returns and put that in your .env file.
 
