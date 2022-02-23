@@ -93,35 +93,45 @@ class Preserve {
   }
 
   async getIndexLength() {
-    const jsonInterface =
-      require("./artifacts/contracts/preserve.sol/Preserve.json").abi;
-    const contract = new this.web3js.eth.Contract(
-      jsonInterface,
-      this.contractAddress
-    );
-    const res = await contract.methods.returnIndexLen().call({
-      from: this.web3js.eth.defaultAccount,
-      gas: 200000,
-      gasPrice: 200000,
-    });
+    try {
+      const jsonInterface =
+        require("./artifacts/contracts/preserve.sol/Preserve.json").abi;
+      const contract = new this.web3js.eth.Contract(
+        jsonInterface,
+        this.contractAddress
+      );
+      const res = await contract.methods.returnIndexLen().call({
+        from: this.web3js.eth.defaultAccount,
+        gas: 200000,
+        gasPrice: 200000,
+      });
 
-    return res;
+      return res;
+    } catch (e) {
+      console.error("Could not fetch the index length");
+      return null;
+    }
   }
 
   async getValueAtIndex(index) {
-    const jsonInterface =
-      require("./artifacts/contracts/preserve.sol/Preserve.json").abi;
-    const contract = new this.web3js.eth.Contract(
-      jsonInterface,
-      this.contractAddress
-    );
-    //TODO fix gas prices, are they needed for calls
-    const res = await contract.methods.returnValueAtIndex(index).call({
-      from: this.web3js.eth.defaultAccount,
-      gas: 200000,
-      gasPrice: 200000,
-    });
-    return res;
+    try {
+      const jsonInterface =
+        require("./artifacts/contracts/preserve.sol/Preserve.json").abi;
+      const contract = new this.web3js.eth.Contract(
+        jsonInterface,
+        this.contractAddress
+      );
+      //TODO fix gas prices, are they needed for calls
+      const res = await contract.methods.returnValueAtIndex(index).call({
+        from: this.web3js.eth.defaultAccount,
+        gas: 200000,
+        gasPrice: 200000,
+      });
+      return res;
+    } catch (e) {
+      console.error("Could not fetch last value");
+      return null;
+    }
   }
 
   async getLastValue() {
