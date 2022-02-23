@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
 
-/* 
-TODO
- - Make sure only a certain set of ownsers can addAddresses
- */
-
 contract Preserve {
+  uint256 constant versionNumber = 2;
+
   address owner;
   uint256 indexLen;
+  string indexName;
+
+  event IndexUpdated(address indexed _from, string _value, uint256 _indexLen);
 
   /*
     1 - Full permissions
@@ -28,25 +28,20 @@ contract Preserve {
   }
 
   constructor() {
-    permissions[msg.sender] = 1;
     owner = msg.sender;
+    permissions[msg.sender] = 1;
+    indexName = "Unnamed";
   }
 
   /***
    Functions
   */
-  function setUserPermissions(address _user, uint256 _permission)
-    external
-    fullPermissions
-  {
-    require(_user != owner, "Can't modify owner permissions");
-    require(_user != msg.sender, "Can't modify your own permissions");
-
-    permissions[_user] = _permission;
-  }
-
   function returnIndexLen() external view returns (uint256) {
     return indexLen;
+  }
+
+  function returnVersion() external pure returns (uint256) {
+    return versionNumber;
   }
 
   function returnValueAtIndex(uint256 _idx)
@@ -57,8 +52,24 @@ contract Preserve {
     return mainIndex[_idx];
   }
 
+  /* State changing functions */
+  function setUserPermissions(address _user, uint256 _permission)
+    external
+    fullPermissions
+  {
+    require(_user != owner, "Can't modify owner permissions");
+    require(_user != msg.sender, "Can't modify your own permissions");
+
+    permissions[_user] = _permission;
+  }
+
+  function setIndexName(string memory newName) external fullPermissions {
+    indexName = newName;
+  }
+
   function addValueToIndex(string memory _value) external fullPermissions {
     mainIndex[indexLen] = _value;
     indexLen++;
+    emit IndexUpdated(msg.sender, _value, indexLen);
   }
 }
