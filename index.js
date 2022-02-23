@@ -5,21 +5,23 @@ const Web3StorageHelper = require("./storage/web3/index");
 const generatePreserveMetadata = require("./storage/utils");
 
 class Preserve {
-  constructor(network = "mumbai") {
+  constructor(network = "mumbai", contractAddress = null) {
     this.storage = new Web3StorageHelper();
 
-    console.log(`Using ${network} network`);
     if (network === "mainnet") {
       this.from_address = process.env.POLYGON_ADDRESS;
       this.key = process.env.POLYGON_KEY;
       this.url = `https://polygon-mainnet.g.alchemy.com/v2/${process.env.POLYGON_ALCHEMY_API_KEY}`;
-      this.contractAddress = process.env.POLYGON_CONTRACT;
+      this.contractAddress = contractAddress ?? process.env.POLYGON_CONTRACT;
     } else {
       this.from_address = process.env.POLYGON_TEST_ADDRESS;
       this.key = process.env.POLYGON_TEST_KEY;
       this.url = `https://polygon-mumbai.g.alchemy.com/v2/${process.env.POLYGON_TEST_ALCHEMY_API_KEY}`;
-      this.contractAddress = process.env.POLYGON_TEST_CONTRACT;
+      this.contractAddress =
+        contractAddress ?? process.env.POLYGON_TEST_CONTRACT;
     }
+
+    console.log(`Using ${network} network, contract ${this.contractAddress}`);
 
     this.web3js = new Web3(new Web3.providers.HttpProvider(this.url));
     this.account = this.web3js.eth.accounts.privateKeyToAccount(this.key);
