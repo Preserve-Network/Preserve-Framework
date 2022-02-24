@@ -1,5 +1,11 @@
 # Preserve Framework
 
+A collection of software and services aimed at preserving historically important digital information forever. We accomplish this by using various decentralized storage providers and multiple blockchains to create an immutable persistent network.
+
+![Preserve Framework Diagram](https://github.com/Preserve-Network/Preserve-Framework/blob/main/preserve-diagram.JPG?raw=true)
+
+
+## Getting Started
 Create an .env file in the root directory
 
 The following keys are required
