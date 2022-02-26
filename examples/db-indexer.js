@@ -46,7 +46,6 @@ const normazlieFilename = (filename) => {
 
   const siteIndexData = {};
 
-  indexNum = 2;
   while (indexNum-- > 0) {
     const cid = await preserve.getValueAtIndex(indexNum);
     const metadata = await cidToUrl(cid);
