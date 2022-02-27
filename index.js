@@ -122,8 +122,8 @@ class Preserve {
       );
       const res = await contract.methods.returnIndexLen().call({
         from: this.web3js.eth.defaultAccount,
-        gas: 200000,
-        gasPrice: 200000,
+        gas: 20000000,
+        gasPrice: 20000000,
       });
 
       return res;
@@ -146,8 +146,8 @@ class Preserve {
       //TODO fix gas prices, are they needed for calls
       const res = await contract.methods.returnValueAtIndex(index).call({
         from: this.web3js.eth.defaultAccount,
-        gas: 200000,
-        gasPrice: 200000,
+        gas: 2000000,
+        gasPrice: 2000000,
       });
       return res;
     } catch (e) {

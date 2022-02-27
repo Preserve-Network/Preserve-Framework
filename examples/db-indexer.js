@@ -41,10 +41,10 @@ const normazlieFilename = (filename) => {
     (gateway = "alchemy")
   );
 
-  var indexNum = await preserve.getIndexLength();
-  console.log(`Size: ${indexNum}`);
-
   const siteIndexData = {};
+  var indexNum = await preserve.getIndexLength();
+
+  console.log(`Size: ${indexNum}`);
 
   while (indexNum-- > 0) {
     const cid = await preserve.getValueAtIndex(indexNum);
